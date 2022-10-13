@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;
@@ -52,10 +53,10 @@ namespace MessagePack.Generator
             try
             {
                 Compilation compilation;
-                if (Directory.Exists(input))
+                if (input.Contains(";") || Directory.Exists(input))
                 {
                     string[]? conditionalSymbols = conditionalSymbol?.Split(',');
-                    compilation = await PseudoCompilation.CreateFromDirectoryAsync(input, conditionalSymbols, this.Context.CancellationToken);
+                    compilation = await PseudoCompilation.CreateFromDirectoryAsync(input.Split(";"), conditionalSymbols, this.Context.CancellationToken);
                 }
                 else
                 {

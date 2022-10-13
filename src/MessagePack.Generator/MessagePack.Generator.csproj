@@ -4,13 +4,12 @@
     <AssemblyName>mpc</AssemblyName>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net6.0</TargetFrameworks>
-    <LangVersion>10</LangVersion>
+    <LangVersion>11</LangVersion>
     <Nullable>enable</Nullable>
     <IsPackable>true</IsPackable>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>mpc</ToolCommandName>
     <RollForward>Major</RollForward>
-
     <!-- NuGet Info -->
     <PackageId>MessagePack.Generator</PackageId>
     <Title>MessagePack Code Generator</Title>
@@ -19,15 +18,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ConsoleAppFramework" Version="3.3.2" />
-    <PackageReference Include="Microsoft.Build.Locator" Version="1.4.1" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="16.5.0" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.Build" Version="16.5.0" ExcludeAssets="runtime" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.0.1" />
+    <PackageReference Include="ConsoleAppFramework" Version="4.2.4" />
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.5.5" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="17.3.1" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build" Version="17.3.1" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.4.0-2.final" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MessagePack.GeneratorCore\MessagePack.GeneratorCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
+    <PackageReference Update="Microsoft.VisualStudio.Threading.Analyzers" Version="17.3.44" />
+    <PackageReference Update="Nerdbank.GitVersioning" Version="3.5.113" />
+    <PackageReference Update="StyleCop.Analyzers" Version="1.2.0-beta.435" />
   </ItemGroup>
 
 </Project>

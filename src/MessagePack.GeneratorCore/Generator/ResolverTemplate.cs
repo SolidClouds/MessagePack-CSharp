@@ -36,7 +36,9 @@ namespace MessagePackCompiler.Generator
 #pragma warning disable CS1591 // document public APIs
 
 #pragma warning disable SA1312 // Variable names should begin with lower-case letter
-#pragma warning disable SA1649 // File name should match first type name
+#pragma warning disable SA1649 // File name should match first type name\
+
+using MongoDB.Bson;
 
 namespace ");
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));

@@ -17,23 +17,26 @@ namespace MessagePack.Generator
 {
     internal static class PseudoCompilation
     {
-        internal static async Task<CSharpCompilation> CreateFromDirectoryAsync(string directoryRoot, IEnumerable<string>? preprocessorSymbols, CancellationToken cancellationToken)
+        internal static async Task<CSharpCompilation> CreateFromDirectoryAsync(string[] directoryRoots, IEnumerable<string>? preprocessorSymbols, CancellationToken cancellationToken)
         {
             var parseOption = new CSharpParseOptions(LanguageVersion.Latest, DocumentationMode.Parse, SourceCodeKind.Regular, CleanPreprocessorSymbols(preprocessorSymbols));
 
             var syntaxTrees = new List<SyntaxTree>();
             var hasAnnotations = false;
-            foreach (var file in IterateCsFileWithoutBinObj(directoryRoot))
+            foreach (var directoryRoot in directoryRoots)
             {
-                var text = File.ReadAllText(NormalizeDirectorySeparators(file), Encoding.UTF8);
-                var syntax = CSharpSyntaxTree.ParseText(text, parseOption);
-                syntaxTrees.Add(syntax);
-                if (Path.GetFileNameWithoutExtension(file) == "Attributes")
+                foreach (var file in IterateCsFileWithoutBinObj(directoryRoot))
                 {
-                    var root = await syntax.GetRootAsync(cancellationToken).ConfigureAwait(false);
-                    if (root.DescendantNodes().OfType<ClassDeclarationSyntax>().Any(x => x.Identifier.Text == "MessagePackObjectAttribute"))
+                    var text = File.ReadAllText(NormalizeDirectorySeparators(file), Encoding.UTF8);
+                    var syntax = CSharpSyntaxTree.ParseText(text, parseOption);
+                    syntaxTrees.Add(syntax);
+                    if (Path.GetFileNameWithoutExtension(file) == "Attributes")
                     {
-                        hasAnnotations = true;
+                        var root = await syntax.GetRootAsync(cancellationToken).ConfigureAwait(false);
+                        if (root.DescendantNodes().OfType<ClassDeclarationSyntax>().Any(x => x.Identifier.Text == "MessagePackObjectAttribute"))
+                        {
+                            hasAnnotations = true;
+                        }
                     }
                 }
             }
@@ -126,7 +129,7 @@ namespace MessagePack.Generator
             foreach (var dir in Directory.GetDirectories(root, "*", SearchOption.TopDirectoryOnly))
             {
                 var dirName = new DirectoryInfo(dir).Name;
-                if (dirName == "bin" || dirName == "obj")
+                if (dirName == "bin" || dirName == "obj" || dirName == "Assets")
                 {
                     continue;
                 }
