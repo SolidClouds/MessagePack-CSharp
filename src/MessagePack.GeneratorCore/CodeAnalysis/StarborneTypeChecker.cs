@@ -14,7 +14,8 @@ namespace MessagePackCompiler.CodeAnalysis
 
         public static bool IsSignalRClass(INamedTypeSymbol? named)
         {
-            if (named == null)
+
+            if (named == null || named.Name.Contains("HubQueueAccessor"))
             {
                 return false;
             }
@@ -44,7 +45,7 @@ namespace MessagePackCompiler.CodeAnalysis
 
         public static bool IsMessagePackMethod(IMethodSymbol method)
         {
-            if (method == null || method.MethodKind != MethodKind.Ordinary)
+            if (method == null || method.MethodKind != MethodKind.Ordinary || method.IsStatic)
             {
                 return false;
             }

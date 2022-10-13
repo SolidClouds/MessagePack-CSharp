@@ -778,7 +778,12 @@ namespace MessagePackCompiler.CodeAnalysis
                         stringMembers.Add(member.StringKey, member);
                     }
 
-                    this.CollectCore(item.Type); // recursive collect
+                    var messagePackFormatter = item.GetAttributes().FirstOrDefault(x => x.AttributeClass.ApproximatelyEqual(this.typeReferences.MessagePackFormatterAttribute))?.ConstructorArguments[0];
+
+                    if (messagePackFormatter == null)
+                    {
+                        this.CollectCore(item.Type); // recursive collect
+                    }
                 }
 
                 foreach (IFieldSymbol item in type.GetAllMembers().OfType<IFieldSymbol>())
@@ -1029,10 +1034,11 @@ namespace MessagePackCompiler.CodeAnalysis
         {
             var name = type.ContainingType is object ? GetMinimallyQualifiedClassName(type.ContainingType) + "_" : string.Empty;
             name += type.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
-            name = name.Replace(".", "_");
-            name = name.Replace("<", "_");
-            name = name.Replace(">", "_");
+            name = name.Replace('.', '_');
+            name = name.Replace('<', '_');
+            name = name.Replace('>', '_');
             name = Regex.Replace(name, @"\[([,])*\]", match => $"Array{match.Length - 1}");
+            name = name.Replace("?", string.Empty);
             return name;
         }
 
