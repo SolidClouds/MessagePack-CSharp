@@ -15,7 +15,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.MSBuild;
 using Microsoft.Extensions.Hosting;
-
 namespace MessagePack.Generator
 {
     public class MessagepackCompiler : ConsoleAppBase
@@ -62,6 +61,12 @@ namespace MessagePack.Generator
                 {
                     (workspace, compilation) = await this.OpenMSBuildProjectAsync(input, this.Context.CancellationToken);
                 }
+
+                // Create a new generator driver
+                var driver = CSharpGeneratorDriver.Create(new[] { new Starborne.HubClientTransferObjectGenerator() });
+
+                // Run the generator on the compilation
+                driver.RunGeneratorsAndUpdateCompilation(compilation!, out compilation, out var _);
 
                 await new MessagePackCompiler.CodeGenerator(x => Console.WriteLine(x), this.Context.CancellationToken)
                     .GenerateFileAsync(
