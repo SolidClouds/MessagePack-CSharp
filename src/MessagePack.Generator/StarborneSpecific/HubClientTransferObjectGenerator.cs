@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -27,6 +28,7 @@ public class HubClientTransferObjectGenerator : IIncrementalGenerator
                 )
             );
 
+        int index = 0;
 
         // register the source output
         context.RegisterSourceOutput(syntaxProvider, (context2, data) =>
@@ -82,7 +84,7 @@ public class HubClientTransferObjectGenerator : IIncrementalGenerator
                 sourceBuilder.AppendLine($"\t\t=> hubClient is {nameSpace + interfaceName} hub ? hub.{method.Identifier}({string.Join(", ", parameters.Select(i => i.Identifier))}) : Task.CompletedTask;");
                 sourceBuilder.AppendLine("}");
 
-                unionBuilder.AppendLine($"[Union(0, typeof({method.Identifier}_TransferObject))]");
+                unionBuilder.AppendLine($"[Union({index++}, typeof({method.Identifier}_TransferObject))]");
             }
 
             if (!string.IsNullOrEmpty(interfaceName))

@@ -52,7 +52,7 @@ namespace MessagePackCompiler.CodeAnalysis
 
             if (IsSignalRClass(method.ContainingType))
             {
-                return method.MethodKind != MethodKind.Constructor;
+                return method.MethodKind != MethodKind.Constructor && !method.IsOverride;
             }
             else if (IsController(method.ContainingType))
             {
